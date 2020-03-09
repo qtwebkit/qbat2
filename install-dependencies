@@ -1,0 +1,39 @@
+#!/bin/sh
+
+packages=" \
+    build-essential git cmake \
+    perl python ruby flex gperf bison cmake gcc-7 g++-7 \
+    ninja-build libfontconfig1-dev libicu-dev libsqlite3-dev zlib1g-dev \
+    libjpeg-dev libxslt1-dev libxml2-dev libhyphen-dev \
+    qtbase5-dev libqt5gstreamer-dev  qtbase5-private-dev \
+    qtdeclarative5-dev qtdeclarative5-dev-tools \
+    qtdeclarative5-private-dev qtpositioning5-dev \
+    qtbase5-dev-tools libqt5sensors5-dev \
+    libqt5webchannel5-dev libqt5gstreamer-dev \
+    libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev \
+    libgstreamer-plugins-bad1.0-dev libwoff-dev \
+    libvpx-dev xfonts-utils ruby-dev patch \
+    libwayland-dev libxslt1-dev libxtst-dev libxt-dev libxi-dev \
+    libxcomposite-dev libwebp-dev libupower-glib-dev \
+    libvorbis-dev libtheora-dev libtasn1-6-dev \
+    libsrtp2-dev libsoup2.4-dev libsecret-1-dev libseccomp-dev \
+    librsvg2-dev libpulse-dev libpango1.0-dev  libopus-dev \
+    libnotify-dev libmpg123-dev libmount-dev libjpeg-dev \
+    libgudev-1.0-dev libgl1-mesa-glx libgl1-mesa-dev \
+    libgirepository1.0-dev libgcrypt20-dev libfile-copy-recursive-perl \
+    libffi-dev libfaad-dev libevent-dev libenchant-dev libedit-dev \
+    libatk1.0-dev libasound2-dev itstool intltool geoclue-2.0 bubblewrap \
+    autoconf automake autopoint autotools-dev libxcb1-dev libxrender-dev \
+    libxcb-render0-dev libxcb-shape0-dev libxcb-randr0-dev libxcb-xfixes0-dev \
+    libxcb-sync-dev libxcb-image0-dev libxcb-render-util0-dev libxcb-shm0-dev \
+    libxcb-icccm4-dev libxcb-keysyms1-dev libsm-dev libice-dev libx11-xcb-dev \
+    libxcb-glx0-dev libxcb-glx0-dev libxkbcommon-x11-dev \
+    libdbus-1-dev libdbus-glib-1-dev libdbus-c++-dev \
+    weston xvfb python-gi python-psutil python-yaml pulseaudio-utils gdb curl \
+    libtool libtool-bin libtool-doc yelp-tools apache2 \
+    libapache2-mod-php python-setuptools pypy-setuptools python-dev python-pip vim \
+    pulseaudio virtualenv zip ruby-json ruby-highline subversion libqt5opengl5-dev \
+"
+
+# Like in LXC debian template
+apt-get install --force-yes -y --no-install-recommends $packages
