@@ -9,7 +9,7 @@ jobs:
       uses: elgohr/Publish-Docker-Github-Action@master
       with:
         dockerfile: qbat2-base/Dockerfile
-        name: docker.pkg.github.com/qtwebkit/qbat2-base
+        name: qtwebkit/qbat2/qbat2-base
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
         registry: docker.pkg.github.com
