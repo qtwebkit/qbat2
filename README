@@ -1,0 +1,15 @@
+Plan:
+
+1. Build qbat2-base and push it
+2. Build image with jhbuild
+  2.1. Checkout qtwebkit
+  2.2. md5sum of kjbuildrc, jhbuild.modules, jhbuild-qt-5.4.modules (?) - combine somehow with filenames
+  2.3. If qbat2:$hash already exist, goto 3
+  2.4. Run build-jhbuild.sh in docker with mounted WebKit
+  2.5. Save DependenciesQT inside container fs instead of mounted
+  2.6. Push result as qbat2:$hash and qbat2:latest
+3. Build qtwebkit
+  3.1. Start qbat2:$hash with mounted WebKit
+  3.2. Move DependenciesQT to WebKitBuild
+  3.3. build-qtwebkit-release.sh
+
