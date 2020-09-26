@@ -33,7 +33,8 @@ packages=" \
     libtool libtool-bin libtool-doc yelp-tools apache2 \
     libapache2-mod-php python-setuptools pypy-setuptools python-dev python-pip vim \
     pulseaudio virtualenv zip ruby-json ruby-highline subversion libqt5opengl5-dev \
+    libxml-libxml-perl libxml-perl locales libcgi-pm-perl \
 "
 
 # Like in LXC debian template
-apt-get install --force-yes -y --no-install-recommends $packages
+DEBIAN_FRONTEND=noninteractive apt-get install --force-yes -y --no-install-recommends $packages
