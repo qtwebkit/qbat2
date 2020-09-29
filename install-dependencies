@@ -4,7 +4,7 @@ packages=" \
     build-essential git cmake dwz \
     perl python ruby flex gperf bison cmake gcc-7 g++-7 \
     ninja-build libfontconfig1-dev libicu-dev libsqlite3-dev zlib1g-dev \
-    libjpeg-dev libxslt1-dev libxml2-dev libhyphen-dev \
+    libjpeg-dev libxslt1-dev libxml2-dev libhyphen-dev hyphen-en-us \
     qtbase5-dev libqt5gstreamer-dev  qtbase5-private-dev \
     qtdeclarative5-dev qtdeclarative5-dev-tools \
     qtdeclarative5-private-dev qtpositioning5-dev \
