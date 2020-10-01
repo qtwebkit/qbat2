@@ -1,7 +1,7 @@
 #!/bin/sh
 
 packages=" \
-    build-essential git cmake dwz \
+    build-essential git cmake dwz clang ccache \
     perl python ruby flex gperf bison cmake gcc-7 g++-7 \
     ninja-build libfontconfig1-dev libicu-dev libsqlite3-dev zlib1g-dev \
     libjpeg-dev libxslt1-dev libxml2-dev libhyphen-dev hyphen-en-us \
