@@ -1,44 +1,142 @@
-#!/bin/sh
+#!/bin/bash -e
 
-packages=" \
-    build-essential git cmake dwz clang ccache strace \
-    perl python ruby flex gperf bison cmake gcc-7 g++-7 \
-    ninja-build libfontconfig1-dev libicu-dev libsqlite3-dev zlib1g-dev \
-    libjpeg-dev libxslt1-dev libxml2-dev libhyphen-dev hyphen-en-us \
-    qtbase5-dev libqt5gstreamer-dev  qtbase5-private-dev \
-    qtdeclarative5-dev qtdeclarative5-dev-tools \
-    qtdeclarative5-private-dev qtpositioning5-dev \
-    qtbase5-dev-tools libqt5sensors5-dev \
-    libqt5webchannel5-dev libqt5gstreamer-dev \
-    libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev \
-    libgstreamer-plugins-bad1.0-dev libwoff-dev \
-    libvpx-dev xfonts-utils ruby-dev patch \
-    libwayland-dev libxslt1-dev libxtst-dev libxt-dev libxi-dev \
-    libxcomposite-dev libwebp-dev libupower-glib-dev \
-    libvorbis-dev libtheora-dev libtasn1-6-dev \
-    libsrtp2-dev libsoup2.4-dev libsecret-1-dev libseccomp-dev \
-    librsvg2-dev libpulse-dev libpango1.0-dev  libopus-dev \
-    libnotify-dev libmpg123-dev libmount-dev libjpeg-dev \
-    libgudev-1.0-dev libgl1-mesa-glx libgl1-mesa-dev \
-    libgirepository1.0-dev libgcrypt20-dev libfile-copy-recursive-perl \
-    libffi-dev libfaad-dev libevent-dev libenchant-dev libedit-dev \
-    libatk1.0-dev libasound2-dev itstool intltool geoclue-2.0 bubblewrap \
-    autoconf automake autopoint autotools-dev libxcb1-dev libxrender-dev \
-    libxcb-render0-dev libxcb-shape0-dev libxcb-randr0-dev libxcb-xfixes0-dev \
-    libxcb-sync-dev libxcb-image0-dev libxcb-render-util0-dev libxcb-shm0-dev \
-    libxcb-icccm4-dev libxcb-keysyms1-dev libsm-dev libice-dev libx11-xcb-dev \
-    libxcb-glx0-dev libxcb-glx0-dev libxkbcommon-x11-dev \
-    libdbus-1-dev libdbus-glib-1-dev libdbus-c++-dev \
-    weston xvfb python-gi python-psutil python-yaml pulseaudio-utils gdb curl \
-    libtool libtool-bin libtool-doc yelp-tools apache2 \
-    libapache2-mod-php python-setuptools pypy-setuptools python-dev python-pip vim \
-    pulseaudio virtualenv zip ruby-json ruby-highline subversion libqt5opengl5-dev \
-    libxml-libxml-perl libxml-perl locales libcgi-pm-perl \
-"
+# This script needs to be run with root rights.
+if [ $UID -ne 0 ]; then
+    sudo $0
+    exit 0
+fi
 
-# Like in LXC debian template
-DEBIAN_FRONTEND=noninteractive apt-get install --force-yes -y --no-install-recommends $packages
+function printNotSupportedMessageAndExit() {
+    echo
+    echo "Currently this script only works for distributions supporting apt-get."
+    echo "Please add support for your distribution."
+    echo
+    exit 1
+}
 
-# Generate locale
-sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
-    locale-gen
+function checkInstaller {
+    # apt-get - Debian based distributions
+    apt-get --version &> /dev/null
+    if [ $? -eq 0 ]; then
+        installDependenciesWithApt
+        exit 0
+    fi
+
+    printNotSupportedMessageAndExit
+}
+
+# If the package $1 is available, prints it. Otherwise prints $2.
+# Useful for handling when a package is renamed on new versions of Debian/Ubuntu.
+function aptIfElse {
+    if apt-cache show $1 &>/dev/null; then
+        echo $1
+    else
+        echo $2
+    fi
+}
+
+function installDependenciesWithApt {
+    # These are dependencies necessary for building Qt and QtWebKit.
+    packages=" \
+        g++ \
+        binutils \
+        bubblewrap \
+        libc6-dev \
+        make \
+        cmake \
+        ninja-build \
+        bison \
+        flex \
+        gawk \
+        gperf \
+        perl \
+        python \
+        ruby \
+        libdbus-1-dev \
+        libevent-dev \
+        libfile-copy-recursive-perl \
+        $(aptIfElse libgcrypt20-dev libgcrypt11-dev) \
+        libgl1-mesa-dev \
+        libglu1-mesa-dev \
+        libhyphen-dev \
+        libjpeg-dev \
+        libopenjp2-7-dev \
+        libpng-dev \
+        libseccomp-dev \
+        libsqlite3-dev \
+        libtasn1-6-dev \
+        libwebp-dev \
+        libwoff-dev \
+        libx11-dev \
+        libx11-xcb-dev
+        libxcb-glx0-dev
+        libxcb1-dev \
+        libxcb-keysyms1-dev \
+        libxcb-image0-dev \
+        libxcb-shm0-dev \
+        libxcb-icccm4-dev \
+        libxcb-sync0-dev \
+        libxcb-xfixes0-dev \
+        libxcb-xinerama0-dev \
+        libxcb-shape0-dev \
+        libxcb-randr0-dev \
+        libxcb-render-util0-dev \
+        libxcomposite-dev \
+        libxext-dev \
+        libxfixes-dev \
+        libxrender-dev \
+        libxslt1-dev \
+        zlib1g-dev
+        "
+
+    # These are dependencies necessary for running tests.
+    packages="$packages \
+        apache2 \
+        curl \
+        hyphen-en-us \
+        libapache2-mod-php \
+        libcgi-pm-perl \
+        libhttp-date-perl \
+        php-json \
+        xvfb"
+
+    # These are dependencies necessary for update-qtwebkit-libs and jhbuild.
+    packages="$packages \
+        automake \
+        autopoint \
+        dwz \
+        git-core \
+        gettext \
+        patch \
+        libtool-bin \
+        libfaad-dev \
+        libfdk-aac-dev \
+        libmpg123-dev \
+        libopus-dev \
+        libtheora-dev \
+        libvorbis-dev \
+        libxml-libxml-perl \
+        "
+
+    # These are dependencies necessary for building GLib and GStreamer.
+    packages="$packages \
+        libpulse-dev \
+        "
+
+    if [ -n $BUILDING_DOCKER ]; then
+        # Additional stuff for Docker image
+        packages="$packages \
+            clang \
+            ccache \
+            gdb \
+            strace \
+            vim-tiny \
+            zstd \
+            "
+    fi
+
+    apt-get install -y --no-install-recommends $packages
+}
+
+checkInstaller
+
