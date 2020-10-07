@@ -93,11 +93,16 @@ function installDependenciesWithApt {
     packages="$packages \
         apache2 \
         curl \
+        fonts-liberation \
         hyphen-en-us \
         libapache2-mod-php \
         libcgi-pm-perl \
         libhttp-date-perl \
         php-json \
+        python-psutil \
+        python-yaml \
+        ruby-json \
+        ruby-highline \
         xvfb"
 
     # These are dependencies necessary for update-qtwebkit-libs and jhbuild.
@@ -105,7 +110,7 @@ function installDependenciesWithApt {
         automake \
         autopoint \
         dwz \
-        git-core \
+        git \
         gettext \
         patch \
         libtool-bin \
